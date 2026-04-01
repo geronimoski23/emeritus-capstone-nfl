@@ -105,3 +105,39 @@ When looking at the raw x and y coordinates, their values varied a lot depending
 However, when examining how much a player moved between consecutive frames, the changes in position (Δx and Δy) were much smaller and more consistent across plays. Because of this, I chose to predict the change in position rather than the absolute location on the field.
 
 By modeling movement instead of raw position, the problem becomes more stable and easier for the model to learn. It also shifts the focus from “where is the player on the field?” to “how is the player moving?”, which better matches the goal of predicting post-throw dynamics.
+
+## Model Results and Inference
+
+The model uses an autoregressive regression framework to predict player displacement (Δx, Δy) one frame at a time. Single-step predictions are stable due to low variance in displacement, while multi-step rollouts remain qualitatively realistic despite some error accumulation. Predicted trajectories preserve key behaviors such as pursuit angles, route continuation, and clustering near the catch point.
+
+### Inference Pipeline
+1. Initialize from final pre-throw frame  
+2. Predict Δx, Δy  
+3. Update player positions  
+4. Recompute features  
+5. Repeat for all future frames  
+
+This allows full trajectory simulation without access to future ground truth. :contentReference[oaicite:0]{index=0}
+
+### Time Series Autoregressive Approach
+The model treats player movement as a time series, learning a transition from current state → next state. By predicting incremental movement instead of absolute position, the model reduces variance and enables stable, iterative forecasting across multiple frames.
+
+### Business Applications (NFL)
+- Simulate defensive reactions to different throw locations  
+- Evaluate coverage discipline and pursuit efficiency  
+- Analyze and optimize offensive/defensive schemes  
+- Support player development through scenario simulation  
+
+This shifts tracking data from descriptive analysis to predictive decision-making.
+
+---
+
+## Next Steps
+
+- **RNNs / LSTMs:** Capture longer temporal dependencies and reduce error accumulation  
+- **Transformers:** Model global temporal patterns and player importance via attention  
+- **Multi-Agent Modeling:** Incorporate player-to-player interactions (e.g., graph-based approaches)  
+- **Richer Features:** Add play context, player tendencies, and game situation  
+- **Uncertainty Modeling:** Predict distributions over trajectories instead of single paths  
+- **Improved Metrics:** Evaluate using football-specific outcomes (e.g., coverage tightness)  
+- **Deployment:** Build real-time simulation tools for coaching and game planning  

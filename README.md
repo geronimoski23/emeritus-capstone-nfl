@@ -118,6 +118,7 @@ The model uses an autoregressive regression framework to predict player displace
 5. Repeat for all future frames  
 
 This allows full trajectory simulation without access to future ground truth. :contentReference[oaicite:0]{index=0}
+![Model](images/ModelRecording.gif)
 
 ### Time Series Autoregressive Approach
 The model treats player movement as a time series, learning a transition from current state → next state. By predicting incremental movement instead of absolute position, the model reduces variance and enables stable, iterative forecasting across multiple frames.
